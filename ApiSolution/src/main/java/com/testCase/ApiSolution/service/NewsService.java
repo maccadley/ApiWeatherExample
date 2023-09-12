@@ -13,8 +13,25 @@ public class NewsService {
     @Autowired
     private NewsGathering gathering;
 
+    @Autowired
+    private SaveArticlesService saveArticlesService;
+
+    @Autowired
+    private BlackListService blackListService;
+
+    @Autowired
+    private NewsMultiThreadFetching newsMultiThreadFetching;
+
     public List<News> getAllNews() {
-        return gathering.getAll();
+        return newsMultiThreadFetching.fetchNewsInParallel();
+    }
+
+    public void saveToDb(List<News> news) {
+        saveArticlesService.saveArticles(news);
+    }
+
+    public void saveBlockList(String blockWord) {
+        blackListService.addBan(blockWord);
     }
 
 }

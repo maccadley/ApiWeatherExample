@@ -19,7 +19,6 @@ import java.util.List;
 public class NewsCollector {
 
 
-
         URL url;
 
         public List<News> getAll() {
@@ -35,7 +34,6 @@ public class NewsCollector {
                     ObjectMapper mapper = new ObjectMapper();
                     News[] newsItems = mapper.readValue(connection.getInputStream(), News[].class);
                     for (News news : newsItems) {
-                        log.info("Found obj: " + news.toString());
                         result.add(news);
                     }
 

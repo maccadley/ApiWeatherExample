@@ -4,10 +4,8 @@ import com.testCase.ApiSolution.model.News;
 import com.testCase.ApiSolution.service.NewsService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
 import java.util.List;
 
 @RestController
@@ -22,9 +20,16 @@ public class ApiController {
     public ResponseEntity<List<News>> getAll() {
         List<News> result;
         result = service.getAllNews();
+        service.saveToDb(result);
         return ResponseEntity.ok(result);
     }
 
+    @PostMapping("/addblock")
+    @ResponseBody
+    public ResponseEntity addBlockWork(@RequestParam("block") String wordToBan) {
+        service.saveBlockList(wordToBan);
+        return ResponseEntity.ok(null);
+    }
 
 
 
