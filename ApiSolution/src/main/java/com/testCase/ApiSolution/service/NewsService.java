@@ -1,5 +1,6 @@
 package com.testCase.ApiSolution.service;
 
+import com.testCase.ApiSolution.dbo.ArticleDTO;
 import com.testCase.ApiSolution.model.News;
 import com.testCase.ApiSolution.repositories.interfaces.NewsGathering;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,16 +23,29 @@ public class NewsService {
     @Autowired
     private NewsMultiThreadFetching newsMultiThreadFetching;
 
-    public List<News> getAllNews() {
-        return newsMultiThreadFetching.fetchNewsInParallel();
+    @Autowired
+    private FetchFilteredArticlesService fetchFilteredArticlesService;
+
+    public List<ArticleDTO> getAllNews() {
+        List<News> unfilteredArticles = newsMultiThreadFetching.fetchNewsInParallel();
+        saveArticlesService.saveArticles(unfilteredArticles);
+        return fetchFilteredArticlesService.fetchAllFilteredArticles();
     }
 
-    public void saveToDb(List<News> news) {
-        saveArticlesService.saveArticles(news);
+    public ArticleDTO getArticleById(Long id) {
+        return fetchFilteredArticlesService.fetchArticleById(id);
+    }
+
+    public List<ArticleDTO> getArticlesByNewsSite(String newsSite) {
+        return fetchFilteredArticlesService.fetchArticlesByNewsSite(newsSite);
     }
 
     public void saveBlockList(String blockWord) {
         blackListService.addBan(blockWord);
+    }
+
+    public void removeFromBlockList(String unblockWord) {
+        blackListService.removeBan(unblockWord);
     }
 
 }

@@ -29,8 +29,8 @@ public class SaveArticlesService {
         List<String> blackList = blackListService.getAllValuesFromBlackList();
 
         for (News news : newsList) {
-            String summary = news.getSummary();
-            if (summary != null && !containsAny(summary, blackList)) {
+            String title = news.getTitle();
+            if (title != null && !containsAny(title, blackList)) {
                 ArticleDTO article = new ArticleDTO();
                 article.setTitle(news.getTitle());
                 article.setNewsSite(news.getNewsSite());
